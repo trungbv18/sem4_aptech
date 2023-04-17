@@ -1,14 +1,23 @@
 package com.example.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "products")
+@EntityListeners(AuditingEntityListener.class)
+@Getter
+@Setter
 public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -29,67 +38,10 @@ public class Product {
     @Column(name = "description")
     private String description;
     @CreatedDate
-    @Column(name = "created_at")
-    private String createdAt;
-
-    public Set<OrderProduct> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(Set<OrderProduct> orders) {
-        this.orders = orders;
-    }
-
+    @Column(name = "created_date")
+    private Timestamp createDate;
     @ManyToMany(fetch = FetchType.LAZY,
             mappedBy = "products")
     @JsonIgnore
     private Set<OrderProduct> orders = new HashSet<>();
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Integer getPrice() {
-        return price;
-    }
-
-    public void setPrice(Integer price) {
-        this.price = price;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
-    }
 }

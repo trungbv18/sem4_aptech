@@ -1,9 +1,21 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
+@Getter
+@Setter
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "customers")
 public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,36 +31,10 @@ public class Customer {
     @Basic
     @Column(name = "email")
     private String email;
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    @CreatedDate
+    @Column(name = "created_date")
+    private Timestamp createDate;
+//    @OneToMany(mappedBy="customer")
+//    @JsonIgnore
+//    private Set <OrderProduct> orderProduct;
 }

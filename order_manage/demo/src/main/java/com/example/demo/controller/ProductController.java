@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.error.ErrorMessage;
 import com.example.demo.model.Product;
 import com.example.demo.repository.ProductRepo;
 import com.example.demo.service.ProductService;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/product")
@@ -30,29 +32,23 @@ public class ProductController {
     return new ResponseEntity<>(productList, HttpStatus.OK);
   }
   @PostMapping("/add")
-  public ResponseEntity<Product> addProduct (@RequestBody Product product) {
-    try {
-      productService.addProduct(product);
-      return ResponseEntity.ok(product);
-    } catch (Exception e) {
-      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+  public ResponseEntity<?> addProduct (@RequestBody Product product) {
+      List<Product> productList = productService.getAllProduct().stream().filter(p ->p.getCode().equals(product.getCode())).collect(Collectors.toList());
+      if (productList.isEmpty()) {
+        productService.addProduct(product);
+        return ResponseEntity.ok(product);
+      }
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ma san pham bi trung");
   }
   @PutMapping ("/update")
-  public ResponseEntity<Product> updateProduct (@RequestParam("id") Long id,@RequestBody Product product) {
-    try {
-      productService.updateProduct(id,product);
-      return ResponseEntity.ok(product);
-    } catch (Exception e) {
-      return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-    }
+  public ResponseEntity<Object> updateProduct (@RequestParam("id") Long id,@RequestBody Product product) {
+      Product productReturn = productService.updateProduct(id,product);
+      if (productReturn != null) return ResponseEntity.ok(product);
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("khong tim thay san pham");
   }
   @GetMapping("/get-by-id/{id}")
   public ResponseEntity<Product> getProductById(@PathVariable("id") Long id){
     Optional<Product> product = productService.getProductById(id);
-    if (product.isPresent()){
-      return new ResponseEntity<>(product.get(), HttpStatus.OK);
-    }
-    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    return product.map(value -> ResponseEntity.ok().body(value)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
   }
 }

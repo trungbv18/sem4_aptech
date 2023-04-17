@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/order")
@@ -34,6 +35,11 @@ public class OrderController {
     } catch (Exception e) {
       return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+  }
+  @GetMapping("/get-by-id/{id}")
+  public ResponseEntity<OrderProduct> getProductById(@PathVariable("id") Long id){
+    Optional<OrderProduct> orderProduct = orderService.getById(id);
+    return orderProduct.map(value -> ResponseEntity.ok().body(value)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
   }
 
 }
