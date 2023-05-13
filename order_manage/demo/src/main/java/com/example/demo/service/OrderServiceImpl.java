@@ -23,11 +23,11 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     public void add(OrderProduct order) {
-        OrderProduct orderProduct = new OrderProduct();
-        orderProduct.setCode(order.getCode());
-        orderProduct.setProducts(order.getProducts());
-        orderProduct.setCustomer(order.getCustomer());
-        orderRepo.save(orderProduct);
+//        OrderProduct orderProduct = new OrderProduct();
+//        orderProduct.setCode(order.getCode());
+//        orderProduct.setProducts(order.getProducts());
+//        orderProduct.setCustomer(order.getCustomer());
+        orderRepo.save(order);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class OrderServiceImpl implements OrderService{
         if (orderProduct.isPresent()){
             OrderProduct _orderProduct = orderProduct.get();
             _orderProduct.setCode(orderInput.getCode());
-            _orderProduct.setProducts(orderInput.getProducts());
+//            _orderProduct.setProducts(orderInput.getProducts());
             return orderRepo.save(_orderProduct);
         }
         return null;

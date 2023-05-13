@@ -40,8 +40,8 @@ public class Product {
     @CreatedDate
     @Column(name = "created_date")
     private Timestamp createDate;
-    @ManyToMany(fetch = FetchType.LAZY,
-            mappedBy = "products")
-    @JsonIgnore
-    private Set<OrderProduct> orders = new HashSet<>();
+//    @ManyToMany(fetch = FetchType.LAZY,
+//            mappedBy = "products")
+//    @JsonIgnore
+//    private Set<OrderProduct> orders = new HashSet<>();
 }

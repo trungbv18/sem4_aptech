@@ -26,19 +26,31 @@ import java.util.Set;
     private long id;
     @Column(name = "code")
     private String code;
+    @Column(name = "customer_id")
+    private long customerId;
     @CreatedDate
     @Column(name = "created_date")
     private Timestamp createDate;
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(	name = "order_detail",
-            joinColumns = @JoinColumn(name = "order_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id"))
-    private Set<Product> products = new HashSet<>();
-    @ManyToOne
-    @JoinColumn(name = "customer_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-//    @JsonIgnore
-    private Customer customer;
+
+//    @ManyToMany(fetch = FetchType.LAZY)
+//    @JoinTable(
+//            name = "order_detail",
+//            joinColumns = @JoinColumn(name = "order_id", referencedColumnName = "id"),
+//            inverseJoinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id")
+//    )
+//    private Set<Product> products = new HashSet<>();
+
+
+    //    @ManyToMany(fetch = FetchType.LAZY)
+//    @JoinTable(	name = "order_detail",
+//            joinColumns = @JoinColumn(name = "order_id"),
+//            inverseJoinColumns = @JoinColumn(name = "product_id"))
+//    private Set<Product> products = new HashSet<>();
+//    @ManyToOne
+//    @JoinColumn(name = "customer_id")
+//    @OnDelete(action = OnDeleteAction.CASCADE)
+////    @JsonIgnore
+//    private Customer customer;
 //    @ManyToOne
 //    @JoinColumn(name="customer_id")
 //    private Customer customer;

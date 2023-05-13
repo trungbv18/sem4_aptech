@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/product")
+@CrossOrigin(value = "*", maxAge = 3600)
 public class ProductController {
   private final ProductService productService;
   @Autowired
@@ -25,6 +26,7 @@ public class ProductController {
 
   @GetMapping("/get-all")
   public ResponseEntity<List<Product>> getAllProduct() {
+
     List<Product> productList = productService.getAllProduct();
     if(productList.isEmpty()) {
       return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -50,5 +52,15 @@ public class ProductController {
   public ResponseEntity<Product> getProductById(@PathVariable("id") Long id){
     Optional<Product> product = productService.getProductById(id);
     return product.map(value -> ResponseEntity.ok().body(value)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+  }
+
+  @DeleteMapping("/delete")
+  public ResponseEntity<Product> deleteCar(@RequestParam("id") long id) {
+    boolean bl = productService.deleteProduct(id);
+    if (bl) {
+      return new ResponseEntity<>(HttpStatus.OK);
+    } else {
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
   }
 }
